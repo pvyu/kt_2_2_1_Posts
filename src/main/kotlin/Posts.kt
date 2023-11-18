@@ -22,6 +22,6 @@ data class Post (
     val date : Int = 0,
     val text : String = "",
     val friendsOnly : Boolean = false,
-    val comments : Comments = Comments(),
+    val comments : Comments? = null,
     val likes : Likes = Likes()
 )
