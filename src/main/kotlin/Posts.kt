@@ -1,5 +1,7 @@
 package ru.netology.posts
 
+import ru.netology.posts.attachments.Attachment
+
 class Comments (
     val count  : Int = 0,
     val canPost : Boolean = false,
@@ -23,5 +25,6 @@ data class Post (
     val text : String = "",
     val friendsOnly : Boolean = false,
     val comments : Comments? = null,
-    val likes : Likes = Likes()
+    val likes : Likes = Likes(),
+    val attachments : Array<Attachment>? = null
 )
