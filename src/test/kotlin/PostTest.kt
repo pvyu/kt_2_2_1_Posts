@@ -32,4 +32,22 @@ class PostTest {
         val updateResult = WallService.update(post)
         assertEquals(updateResult, false)
     }
+
+    @Test
+    fun testResetCommentOfPostById() {
+        val post : Post = Post(text = "first post")
+        val addedPost = WallService.add(post)
+        WallService.resetCommentOfPostById(addedPost.id)
+        assertEquals(WallService.getCommentsCountOfPostById(addedPost.id), 0)
+    }
+
+    @Test
+    fun testIncrementCommentsCountOfPostById() {
+        val post : Post = Post(text = "first post")
+        val addedPost = WallService.add(post)
+        WallService.createCommentsOfPostById(addedPost.id)
+        WallService.incrementCommentsCountOfPostById(addedPost.id)
+        assertEquals(WallService.getCommentsCountOfPostById(addedPost.id), 1)
+    }
+
 }

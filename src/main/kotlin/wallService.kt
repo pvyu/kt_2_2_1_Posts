@@ -38,4 +38,59 @@ object WallService {
     }
     //---------------------------------------------------------------------
 
+    fun resetCommentOfPostById(id : Int) : Boolean {
+        var result : Boolean = false
+        for ((index, postToUpdate) in posts.withIndex()) {
+            if (postToUpdate.id == id) {
+                posts[index] = posts[index].copy(comments = null)
+                result = true
+            }
+        }
+        return result
+    }
+    //---------------------------------------------------------------------
+
+    fun createCommentsOfPostById(id : Int) : Boolean {
+        var result : Boolean = false
+        for ((index, postToUpdate) in posts.withIndex()) {
+            if (postToUpdate.id == id) {
+                posts[index] = posts[index].copy(comments = Comments())
+                result = true
+            }
+        }
+        return result
+    }
+    //---------------------------------------------------------------------
+
+    fun incrementCommentsCountOfPostById(id : Int) : Boolean {
+        var result : Boolean = false
+        for ((index, postToUpdate) in posts.withIndex()) {
+            if (postToUpdate.id == id) {
+                if (posts[index].comments != null) {
+                    //TODO: Очень мне это не нравится, как сделать иначе?
+                    val newComment : Comments = Comments(posts[index].comments!!.count +1,
+                                                         posts[index].comments!!.canPost,
+                                                         posts[index].comments!!.groupsCanPost,
+                                                         posts[index].comments!!.canClose,
+                                                         posts[index].comments!!.canOpen)
+                    posts[index] = posts[index].copy(comments = newComment)
+                    result = true
+                }
+            }
+        }
+        return result
+    }
+    //---------------------------------------------------------------------
+
+    fun getCommentsCountOfPostById(id : Int) : Int {
+        var result : Int = 0
+        for ((index, postToUpdate) in posts.withIndex()) {
+            if (postToUpdate.id == id) {
+                result = if (posts[index].comments == null) 0 else posts[index].comments!!.count
+            }
+        }
+        return result
+    }
+    //---------------------------------------------------------------------
+
 }
