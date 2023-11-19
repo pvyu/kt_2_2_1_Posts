@@ -69,13 +69,7 @@ object WallService {
         for ((index, postToUpdate) in posts.withIndex()) {
             if (postToUpdate.id == id) {
                 if (posts[index].comments != null) {
-                    //TODO: Очень мне это не нравится, как сделать иначе?
-                    val newComment : Comments = Comments(posts[index].comments!!.count + 1,
-                                                         posts[index].comments!!.canPost,
-                                                         posts[index].comments!!.groupsCanPost,
-                                                         posts[index].comments!!.canClose,
-                                                         posts[index].comments!!.canOpen)
-                    posts[index] = posts[index].copy(comments = newComment)
+                    posts[index] = posts[index].copy(comments = posts[index].comments!!.copy(count = posts[index].comments!!.count + 1))
                     result = true
                 }
             }

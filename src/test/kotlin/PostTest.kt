@@ -56,12 +56,14 @@ class PostTest {
         val post : Post = Post(text = "first post")
         val addedPost = WallService.add(post)
 
-        val photoAttachment : PhotoAttachment = PhotoAttachment(PhotoAttachmentData(1, 1, "", ""))
-        WallService.addAttachmentToPostById(addedPost.id, photoAttachment)
+        var photoAttachment : PhotoAttachment? = PhotoAttachment(PhotoAttachmentData(1, 1, "", ""))
+        WallService.addAttachmentToPostById(addedPost.id, photoAttachment!!)
+        photoAttachment = null
 
         val attachments : Array<Attachment>? = WallService.getAttachmentOfPostById(addedPost.id)
 
         assertEquals(attachments?.size ?: 0, 1)
+        assertEquals(attachments?.get(0)?.type ?: AttachmentType.Unknown, AttachmentType.Photo)
     }
 
     @Test
