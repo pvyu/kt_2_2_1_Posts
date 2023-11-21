@@ -1,5 +1,7 @@
 package ru.netology.posts
 
+import ru.netology.posts.attachments.*
+
 
 object WallService {
     private var currentPostId : Int = 0
@@ -67,13 +69,7 @@ object WallService {
         for ((index, postToUpdate) in posts.withIndex()) {
             if (postToUpdate.id == id) {
                 if (posts[index].comments != null) {
-                    //TODO: Очень мне это не нравится, как сделать иначе?
-                    val newComment : Comments = Comments(posts[index].comments!!.count +1,
-                                                         posts[index].comments!!.canPost,
-                                                         posts[index].comments!!.groupsCanPost,
-                                                         posts[index].comments!!.canClose,
-                                                         posts[index].comments!!.canOpen)
-                    posts[index] = posts[index].copy(comments = newComment)
+                    posts[index] = posts[index].copy(comments = posts[index].comments!!.copy(count = posts[index].comments!!.count + 1))
                     result = true
                 }
             }
@@ -92,5 +88,41 @@ object WallService {
         return result
     }
     //---------------------------------------------------------------------
+
+    fun addAttachmentToPostById(id : Int, attachment : Attachment) : Boolean {
+        var result : Boolean = false
+        for ((index, postToUpdate) in posts.withIndex()) {
+            if (postToUpdate.id == id) {
+                //TODO: не ясно, корректно ли происходит работа со ссылками, т.к. новые объекты, по всей видимости, не создаются
+                var newAttachments : Array<Attachment> = posts[index].attachments ?: emptyArray<Attachment>()
+                newAttachments += attachment
+                posts[index] = posts[index].copy(attachments = newAttachments)
+                result = true
+            }
+        }
+        return result
+    }
+    //---------------------------------------------------------------------
+
+    fun getAttachmentOfPostById(id : Int) : Array<Attachment>? {
+        //TODO: как вернуть ссылку, объект по которой нельза менять?
+        var result : Array<Attachment>? = null
+        for ((index, postToUpdate) in posts.withIndex()) {
+            if (postToUpdate.id == id) {
+                result = posts[index].attachments
+            }
+        }
+        return result
+    }
+    //---------------------------------------------------------------------
+
+    final fun getVideoAttachmentData(attachment : Attachment) : VideoAttachmentData? {
+        var result : VideoAttachmentData? = null
+        if (attachment.type == AttachmentType.Video && (attachment is VideoAttachment)) {
+            result = (attachment as VideoAttachment).data
+        }
+        return result
+    }
+
 
 }
