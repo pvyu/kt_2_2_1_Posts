@@ -1,9 +1,10 @@
 import org.junit.Test
 import org.junit.Before
 import org.junit.Assert.*
-import ru.netology.posts.Post
-import ru.netology.posts.WallService
+import ru.netology.posts.*
 import ru.netology.posts.attachments.*
+import ru.netology.posts.exceptions.NoSuchUserException
+import ru.netology.posts.exceptions.PostNotFoundException
 
 class PostTest {
     @Before
@@ -93,4 +94,75 @@ class PostTest {
         assertEquals(attachmentData?.title ?: "", videoData.title)
         assertEquals(attachmentData?.duration ?: 0, videoData.duration)
     }
+
+    @Test
+    fun testCreateComment() {
+        val post : Post = Post(text = "first post")
+        val addedPost = WallService.add(post)
+
+        val comment : Comment = Comment(text = """test comment in "testCreateComment"""")
+        val addedComment : Comment = WallService.createComment(addedPost.id, comment)
+
+        assertEquals(addedPost.id, addedComment.replyToComment)
+    }
+
+    @Test(expected = PostNotFoundException::class)
+    fun testCreateComment_PostNotFoundException() {
+        val post : Post = Post(text = "first post")
+        val addedPost = WallService.add(post)
+
+        val comment : Comment = Comment(text = """test comment in "testCreateComment_PostNotFoundException"""")
+        WallService.createComment(111, comment)
+    }
+
+    @Test
+    fun testReportComment_Post() {
+        val post : Post = Post(text = "first post", fromId = 1)
+        val addedPost = WallService.add(post)
+
+        var report : ReportComment? = null
+        report = WallService.reportComment(addedPost.fromId, addedPost.id, CommentReportReason.Spam)
+
+        assertNotEquals(report?.id ?: 0, 0)
+        assertEquals(report?.ownerId ?: 0, addedPost.fromId)
+        assertEquals(report?.commentId ?: 0, addedPost.id)
+        assertEquals(report?.reason ?: 0, CommentReportReason.Spam)
+    }
+
+    @Test
+    fun testReportComment_Comment() {
+        val post : Post = Post(text = "first post", fromId = 1)
+        val addedPost = WallService.add(post)
+
+        val comment : Comment = Comment(text = """test comment in "testReportComment_Comment"""", fromId = 2)
+        val addedComment : Comment =WallService.createComment(addedPost.id, comment)
+
+        var report : ReportComment? = null
+        report = WallService.reportComment(addedComment.fromId, addedComment.id, CommentReportReason.Spam)
+
+        assertNotEquals(report?.id ?: 0, 0)
+        assertEquals(report?.ownerId ?: 0, addedComment.fromId)
+        assertEquals(report?.commentId ?: 0, addedComment.id)
+        assertEquals(report?.reason ?: 0, CommentReportReason.Spam)
+    }
+
+    @Test(expected = PostNotFoundException::class)
+    fun testReportComment_PostNotFoundException() {
+        val post : Post = Post(text = "first post", fromId = 1)
+        val addedPost = WallService.add(post)
+
+        var report : ReportComment? = null
+        report = WallService.reportComment(addedPost.fromId, 111, CommentReportReason.Spam)
+    }
+
+    @Test(expected = NoSuchUserException::class)
+    fun testReportComment_NoSuchUserException() {
+        val post : Post = Post(text = "first post", fromId = 1)
+        val addedPost = WallService.add(post)
+
+        var report : ReportComment? = null
+        report = WallService.reportComment(111, addedPost.id, CommentReportReason.Spam)
+    }
+
+
 }
