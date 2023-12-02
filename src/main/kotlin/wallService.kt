@@ -1,15 +1,24 @@
 package ru.netology.posts
 
 import ru.netology.posts.attachments.*
+import ru.netology.posts.exceptions.NoSuchUserException
+import ru.netology.posts.exceptions.PostNotFoundException
 
 
 object WallService {
-    private var currentPostId : Int = 0
+    private var currentEntityId : Int = 0
+
     private var posts = emptyArray<Post>()
+    private var comments = emptyArray<Comment>()
+    private var reports = emptyArray<ReportComment>()
+
+    private fun getNextEntityId() : Int {
+        return ++ currentEntityId
+    }
+    //---------------------------------------------------------------------
 
     fun add(post: Post): Post {
-        currentPostId ++
-        val newPost : Post = post.copy(id = currentPostId)
+        val newPost : Post = post.copy(id = getNextEntityId())
 
         posts += newPost
 
@@ -29,14 +38,63 @@ object WallService {
     }
     //---------------------------------------------------------------------
 
-    fun getCurrentPostId() : Int {
-        return currentPostId
+    fun createComment(postId: Int, comment: Comment): Comment {
+        var newComment : Comment? = null
+
+        for ((index, post) in posts.withIndex()) {
+            if (post.id == postId) {
+                newComment = comment.copy(id = getNextEntityId(), replyToUser = post.ownerId, replyToComment = post.id)
+                comments += newComment
+
+                val newComments : Comments = (posts[index].comments ?: Comments());
+                posts[index] = posts[index].copy(comments = newComments.copy(count = newComments.count + 1))
+            }
+        }
+
+        if (newComment == null) {
+            throw PostNotFoundException("No posts with id = $postId")
+        }
+
+        return newComment!!
+    }
+    //---------------------------------------------------------------------
+
+    fun reportComment(ownerId : Int, commentId : Int, reason : CommentReportReason) : ReportComment? {
+        var report : ReportComment? = null
+        var userID : Int = 0;
+
+        for (post in posts) {
+            if (post.id == commentId) {
+                userID = post.fromId
+                break
+            }
+        } // for post in posts
+        if (userID == 0) {
+            for (comment in comments) {
+                if (comment.id == commentId) {
+                    userID = comment.fromId
+                    break
+                }
+            } // for comment in comments
+        } // if userID == 0
+
+        if (userID == 0) {
+            throw PostNotFoundException("No posts with id = $commentId")
+        }
+        if (userID != ownerId) {
+            throw NoSuchUserException("Author of posts with id = $commentId is not user with id = $ownerId")
+        }
+
+        report = ReportComment(getNextEntityId(), ownerId, commentId, reason)
+        reports += report!!
+
+        return report
     }
     //---------------------------------------------------------------------
 
     fun clear() {
         posts = emptyArray()
-        currentPostId = 0
+        currentEntityId = 0
     }
     //---------------------------------------------------------------------
 
@@ -93,7 +151,6 @@ object WallService {
         var result : Boolean = false
         for ((index, postToUpdate) in posts.withIndex()) {
             if (postToUpdate.id == id) {
-                //TODO: не ясно, корректно ли происходит работа со ссылками, т.к. новые объекты, по всей видимости, не создаются
                 var newAttachments : Array<Attachment> = posts[index].attachments ?: emptyArray<Attachment>()
                 newAttachments += attachment
                 posts[index] = posts[index].copy(attachments = newAttachments)
@@ -105,7 +162,6 @@ object WallService {
     //---------------------------------------------------------------------
 
     fun getAttachmentOfPostById(id : Int) : Array<Attachment>? {
-        //TODO: как вернуть ссылку, объект по которой нельза менять?
         var result : Array<Attachment>? = null
         for ((index, postToUpdate) in posts.withIndex()) {
             if (postToUpdate.id == id) {
