@@ -2,6 +2,29 @@ package ru.netology.posts
 
 import ru.netology.posts.attachments.Attachment
 
+data class Comment(
+    val id  : Int = 0,                              // Идентификатор записи
+    val fromId  : Int = 0,                          // Идентификатор автора записи
+    val date : Long = 0,                            // Время публикации записи в формате unixtime
+    val text : String = "",                         // Текст записи
+    val replyToUser  : Int = 0,                     // Идентификатор пользователя или сообщества, в ответ которому оставлен текущий комментарий
+    val replyToComment  : Int = 0,                  // Идентификатор комментария, в ответ на который оставлен текущий
+    val attachments : Array<Attachment>? = null,    // Медиавложения комментария (фотографии, ссылки и т.п.)
+    val parentsStack : Array<Int>? = null,          // Массив идентификаторов родительских комментариев
+)
+
+enum class CommentReportReason(val Code : Int) { Unknown(-1), Spam(0), ChildPorn(1), Extremism(2),
+                                                 Violation(3), Drugs(4), Porn(5),
+                                                 Affront(5), Suicide(6)
+}
+data class ReportComment (
+    val id  : Int = 0,                                               // Идентификатор жалобы
+    val ownerId  : Int = 0,                                          // Идентификатор пользователя или сообщества, которому принадлежит комментарий
+    val commentId  : Int = 0,                                        // Идентификатор комментария
+    val reason : CommentReportReason = CommentReportReason.Unknown   // Причина жалобы
+)
+
+
 data class Comments (
     val count  : Int = 0,
     val canPost : Boolean = false,
