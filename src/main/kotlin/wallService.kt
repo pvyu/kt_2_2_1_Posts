@@ -1,15 +1,15 @@
 package ru.netology.posts
 
 import ru.netology.posts.attachments.*
+import ru.netology.vk.common.Common
 
 
 object WallService {
-    private var currentPostId : Int = 0
+    //private var currentPostId : Int = 0
     private var posts = emptyArray<Post>()
 
     fun add(post: Post): Post {
-        currentPostId ++
-        val newPost : Post = post.copy(id = currentPostId)
+        val newPost : Post = post.copy(id = Common.getNextId())
 
         posts += newPost
 
@@ -29,14 +29,9 @@ object WallService {
     }
     //---------------------------------------------------------------------
 
-    fun getCurrentPostId() : Int {
-        return currentPostId
-    }
-    //---------------------------------------------------------------------
-
     fun clear() {
         posts = emptyArray()
-        currentPostId = 0
+        Common.reset()
     }
     //---------------------------------------------------------------------
 
