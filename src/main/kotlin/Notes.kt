@@ -11,17 +11,16 @@ import ru.netology.vk.common.Privacy
 
 
 data class Note (
-    val ownerId : Int = 0,                          // ID автора заметки
-    val title : String = "",                        // Заголовок заметки
-    val text : String = "",                         // Текст заметки
-    val privacy : Privacy = Privacy.Unknown,        // Уровень доступа к заметке
-    val commentPrivacy : Privacy = Privacy.Unknown  // Уровень доступа к комментированию заметки
+    val ownerId : Int = 0,                           // ID автора заметки
+    val title : String = "",                         // Заголовок заметки
+    val text : String = "",                          // Текст заметки
+    val privacy : Privacy = Privacy.Unknown,         // Уровень доступа к заметке
+    val commentPrivacy : Privacy = Privacy.Unknown,  // Уровень доступа к комментированию заметки
 ) : Entity(EntityType.Note)
 //---------------------------------------------------------------------------------------------------------------
 
 data class NoteComment(
     val noteId : Int = 0,                           // ID заметки, на которую оставлен комментарий
-    val fromId : Int = 0,                           // ID автора заметки
     val message : String = "",                      // Текст комментария
 ) : Entity(EntityType.NoteComment)
 //---------------------------------------------------------------------------------------------------------------
@@ -35,23 +34,41 @@ object NoteService {
 
     //-----------------------------------------------------------------
 
+    fun clear() {
+        notes.clear()
+        noteComments.clear()
+        deleted.clear()
+
+        currentUserId = 0
+    }
+    //-----------------------------------------------------------------
+
+    fun getNotesCount() : Int = notes.count()
+    //-----------------------------------------------------------------
+
+    fun getNoteCommentsCount() : Int = noteComments.count()
+    //-----------------------------------------------------------------
+
+    fun getDeletionsCount() : Int = deleted.count()
+    //-----------------------------------------------------------------
+
     fun setCurrentUserId(userId : Int) {
         currentUserId = userId
     }
     //-----------------------------------------------------------------
 
-    fun add(title : String, text : String, privacy : Privacy, commentPrivacy : Privacy) : Int {
+    fun add(title : String, text : String, privacy : Privacy, commentPrivacy : Privacy) : Note {
         if (currentUserId == 0) {
             throw NoUserGivenException("NoteService.add: user not given")
         }
         notes += Note(currentUserId, title, text, privacy, commentPrivacy)
-        return notes.last().id
+        return notes.last()
     }
     //-----------------------------------------------------------------
 
-    fun createComment(noteId : Int, ownerId : Int, message : String) : Int {
+    fun createComment(noteId : Int, ownerId : Int, message : String) : NoteComment {
         if (currentUserId == 0) {
-            throw NoUserGivenException("NoteService.add: user not given")
+            throw NoUserGivenException("NoteService.createComment: user not given")
         }
         var currentNote : Note? = null
         for ((index, note) in notes.withIndex()) {
@@ -61,13 +78,13 @@ object NoteService {
             }
         }
         if (currentNote == null) {
-            throw CommentNotFoundException("NoteService.createComment: Comment with id = $noteId not found")
+            throw NoteNotFoundException("NoteService.createComment: Note with id = $noteId not found")
         }
         if (currentNote!!.ownerId != ownerId) {
             throw NoSuchUserException("NoteService.createComment: Author of comment with id = $noteId is not user with id = $ownerId")
         }
-        noteComments += NoteComment(noteId, currentUserId, message)
-        return noteComments.last().id
+        noteComments += NoteComment(noteId, message)
+        return noteComments.last()
     }
     //-----------------------------------------------------------------
 
@@ -133,18 +150,31 @@ object NoteService {
     }
     //-----------------------------------------------------------------
 
-    fun edit(noteId : Int, title : String, text : String, privacy : Privacy, commentPrivacy : Privacy) {
-        var wasEdited : Boolean = false
+    fun edit(noteId : Int, title : String, text : String, privacy : Privacy, commentPrivacy : Privacy) : Note{
+        var resultNote : Note? = null
         for ((index, note) in notes.withIndex()) {
             if (note.id == noteId) {
+                val noteId : Int = notes[index].id
                 notes[index] = notes[index].copy(title = title, text = text, privacy = privacy, commentPrivacy = commentPrivacy)
-                wasEdited = true
+
+                notes[index].id = noteId // !!!
+
+                // Note унаследован от Entity, в котором, исходно в val поле, хранится уникальный id.
+                // Значение id задаётся в конструкторе Entity для недопучения ручной работы со значениями ID.
+                // Метод copy data-класса Note вызывает констуктор Note() и Entity(). В конструкторе Entity происходит
+                // паразитное учвеличение счётчика id, при этом метод copy не может быть использован для задания
+                // id нужного значения.
+                // Не ясно, каким образом при сохраниении наследования Entity<-Note и сохранении Note как data class
+                // можно задать id нужное значение без ручных изменений, желательно сохранив id как val
+
+                resultNote = notes[index]
                 break
             }
         }
-        if (!wasEdited) {
+        if (resultNote == null) {
             throw NoteNotFoundException("NoteService.edit: Note with id = $noteId not found")
         }
+        return resultNote!!
     }
     //-----------------------------------------------------------------
 

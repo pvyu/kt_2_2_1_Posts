@@ -91,7 +91,6 @@ object WallService {
 
     fun clear() {
         posts = emptyArray()
-        Common.reset()
     }
     //---------------------------------------------------------------------
 

@@ -7,8 +7,9 @@ enum class Privacy(val code : Int) { Unknown(-1), All(0),
 enum class EntityType { Unknown, Post, PostComment, Note, NoteComment }
 //---------------------------------------------------------------------------------------------------------------
 
+
 abstract class Entity (entityType : EntityType) {
-    val id : Int = Common.getNextId()
+    var id : Int = Common.getNextId()
     val type : EntityType = entityType
 }
 //---------------------------------------------------------------------------------------------------------------
@@ -18,7 +19,7 @@ object Common {
 
     fun getNextId() : Int = ++currentID
 
-    fun reset() {
+    fun clear() {
         currentID = 0
     }
 
