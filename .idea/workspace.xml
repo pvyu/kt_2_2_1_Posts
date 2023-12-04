@@ -5,10 +5,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="c219d121-88ad-4670-9951-7ae93f967362" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/kotlin/Exceptions.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/kotlin/Posts.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/Posts.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/kotlin/wallService.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/wallService.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/kotlin/PostTest.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/kotlin/PostTest.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/kotlin/Exceptions.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/Exceptions.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/kotlin/Notes.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/Notes.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/kotlin/common.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/common.kt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -19,6 +20,16 @@
     <projectState path="$PROJECT_DIR$">
       <ProjectState />
     </projectState>
+  </component>
+  <component name="ExternalProjectsManager">
+    <system id="GRADLE">
+      <state>
+        <task path="$PROJECT_DIR$">
+          <activation />
+        </task>
+        <projects_view />
+      </state>
+    </system>
   </component>
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
