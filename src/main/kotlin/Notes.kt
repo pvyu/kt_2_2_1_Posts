@@ -16,12 +16,14 @@ data class Note (
     val text : String = "",                          // Текст заметки
     val privacy : Privacy = Privacy.Unknown,         // Уровень доступа к заметке
     val commentPrivacy : Privacy = Privacy.Unknown,  // Уровень доступа к комментированию заметки
+    override val id : Int = Common.getNextId(),      // ID заметки
 ) : Entity(EntityType.Note)
 //---------------------------------------------------------------------------------------------------------------
 
 data class NoteComment(
     val noteId : Int = 0,                           // ID заметки, на которую оставлен комментарий
     val message : String = "",                      // Текст комментария
+    override val id : Int = Common.getNextId(),     // ID комментария
 ) : Entity(EntityType.NoteComment)
 //---------------------------------------------------------------------------------------------------------------
 
@@ -71,7 +73,7 @@ object NoteService {
             throw NoUserGivenException("NoteService.createComment: user not given")
         }
         var currentNote : Note? = null
-        for ((index, note) in notes.withIndex()) {
+        for (note in notes) {
             if (note.id == noteId) {
                 currentNote = note
                 break
@@ -156,17 +158,6 @@ object NoteService {
             if (note.id == noteId) {
                 val noteId : Int = notes[index].id
                 notes[index] = notes[index].copy(title = title, text = text, privacy = privacy, commentPrivacy = commentPrivacy)
-
-                notes[index].id = noteId // !!!
-
-                // Note унаследован от Entity, в котором, исходно в val поле, хранится уникальный id.
-                // Значение id задаётся в конструкторе Entity для недопучения ручной работы со значениями ID.
-                // Метод copy data-класса Note вызывает констуктор Note() и Entity(). В конструкторе Entity происходит
-                // паразитное учвеличение счётчика id, при этом метод copy не может быть использован для задания
-                // id нужного значения.
-                // Не ясно, каким образом при сохраниении наследования Entity<-Note и сохранении Note как data class
-                // можно задать id нужное значение без ручных изменений, желательно сохранив id как val
-
                 resultNote = notes[index]
                 break
             }
@@ -178,18 +169,17 @@ object NoteService {
     }
     //-----------------------------------------------------------------
 
-    fun editComment(commentId : Int, noteOwnerId : Int,  message : String) {
+    fun editComment(commentId : Int, noteOwnerId : Int,  message : String) : NoteComment {
         var wasFound : Boolean = false
-        var wasEdited : Boolean = false
-
+        var editedComment : NoteComment? = null
         for ((index, comment) in noteComments.withIndex()) {
             if (comment.id == commentId) {
                 wasFound = true
                 for (note in notes) {
                     if (note.id == comment.noteId) {
                         if (note.ownerId == noteOwnerId) {
-                            noteComments[index] = noteComments[index].copy(message = message)
-                            wasEdited = true
+                            editedComment = noteComments[index].copy(message = message)
+                            noteComments[index] = editedComment!!
                         }
                         break
                     } // if note.id == comment.noteId
@@ -200,9 +190,11 @@ object NoteService {
         if (!wasFound) {
             throw CommentNotFoundException("NoteService.editComment: Comment with id = $commentId not found")
         }
-        if (wasFound && !wasEdited) {
+        if (wasFound && editedComment == null) {
             throw NoSuchUserException("NoteService.editComment: Author of comment`s note is not user with id = $noteOwnerId")
         }
+
+        return editedComment!!
     }
     //-----------------------------------------------------------------
 
@@ -210,7 +202,7 @@ object NoteService {
         var resultNodes : MutableList<Note> = mutableListOf<Note>()
 
         for (note in notes) {
-            if (noteIds.contains(note.id) && note.ownerId == userId) {
+            if (note.ownerId == userId && noteIds.contains(note.id)) {
                 resultNodes += note
             }
         }

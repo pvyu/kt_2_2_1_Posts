@@ -9,7 +9,7 @@ enum class EntityType { Unknown, Post, PostComment, Note, NoteComment }
 
 
 abstract class Entity (entityType : EntityType) {
-    var id : Int = Common.getNextId()
+    abstract val id : Int
     val type : EntityType = entityType
 }
 //---------------------------------------------------------------------------------------------------------------
