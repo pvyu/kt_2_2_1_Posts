@@ -3,22 +3,16 @@ package ru.netology.posts
 import ru.netology.posts.attachments.*
 import ru.netology.posts.exceptions.NoSuchUserException
 import ru.netology.posts.exceptions.PostNotFoundException
+import ru.netology.vk.common.Common
 
 
 object WallService {
-    private var currentEntityId : Int = 0
-
     private var posts = emptyArray<Post>()
     private var comments = emptyArray<Comment>()
     private var reports = emptyArray<ReportComment>()
 
-    private fun getNextEntityId() : Int {
-        return ++ currentEntityId
-    }
-    //---------------------------------------------------------------------
-
     fun add(post: Post): Post {
-        val newPost : Post = post.copy(id = getNextEntityId())
+        val newPost : Post = post.copy(id = Common.getNextId())
 
         posts += newPost
 
@@ -43,7 +37,7 @@ object WallService {
 
         for ((index, post) in posts.withIndex()) {
             if (post.id == postId) {
-                newComment = comment.copy(id = getNextEntityId(), replyToUser = post.ownerId, replyToComment = post.id)
+                newComment = comment.copy(id = Common.getNextId(), replyToUser = post.ownerId, replyToComment = post.id)
                 comments += newComment
 
                 val newComments : Comments = (posts[index].comments ?: Comments());
@@ -85,7 +79,7 @@ object WallService {
             throw NoSuchUserException("Author of posts with id = $commentId is not user with id = $ownerId")
         }
 
-        report = ReportComment(getNextEntityId(), ownerId, commentId, reason)
+        report = ReportComment(Common.getNextId(), ownerId, commentId, reason)
         reports += report!!
 
         return report
@@ -94,7 +88,6 @@ object WallService {
 
     fun clear() {
         posts = emptyArray()
-        currentEntityId = 0
     }
     //---------------------------------------------------------------------
 

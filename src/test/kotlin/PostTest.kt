@@ -5,11 +5,13 @@ import ru.netology.posts.*
 import ru.netology.posts.attachments.*
 import ru.netology.posts.exceptions.NoSuchUserException
 import ru.netology.posts.exceptions.PostNotFoundException
+import ru.netology.vk.common.Common
 
 class PostTest {
     @Before
     fun clearBeforeTest() {
         WallService.clear()
+        Common.clear()
     }
 
     @Test
