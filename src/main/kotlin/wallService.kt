@@ -7,12 +7,9 @@ import ru.netology.vk.common.Common
 
 
 object WallService {
-
     private var posts = emptyArray<Post>()
     private var comments = emptyArray<Comment>()
     private var reports = emptyArray<ReportComment>()
-
-    //---------------------------------------------------------------------
 
     fun add(post: Post): Post {
         val newPost : Post = post.copy(id = Common.getNextId())
