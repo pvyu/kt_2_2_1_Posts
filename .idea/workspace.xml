@@ -5,11 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="c219d121-88ad-4670-9951-7ae93f967362" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/kotlin/chats.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/kotlin/Exceptions.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/Exceptions.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/kotlin/common.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/common.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/test/kotlin/ChatTest.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/kotlin/chats.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/chats.kt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -71,7 +68,7 @@
     </option>
   </component>
   <component name="RunManager" selected="Gradle.kt_2_2_1_Posts [test]">
-    <configuration name="NoteTest" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+    <configuration name="ChatTest.deleteChat" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
         <option name="externalProjectPath" value="$PROJECT_DIR$" />
@@ -84,7 +81,7 @@
           <list>
             <option value=":test" />
             <option value="--tests" />
-            <option value="&quot;NoteTest&quot;" />
+            <option value="&quot;ChatTest.deleteChat&quot;" />
           </list>
         </option>
         <option name="vmOptions" />
@@ -95,7 +92,7 @@
       <RunAsTest>true</RunAsTest>
       <method v="2" />
     </configuration>
-    <configuration name="NoteTest.getComments" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+    <configuration name="ChatTest.deleteChat_NoChat" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
         <option name="externalProjectPath" value="$PROJECT_DIR$" />
@@ -108,7 +105,7 @@
           <list>
             <option value=":test" />
             <option value="--tests" />
-            <option value="&quot;NoteTest.getComments&quot;" />
+            <option value="&quot;ChatTest.deleteChat_NoChat&quot;" />
           </list>
         </option>
         <option name="vmOptions" />
@@ -119,7 +116,7 @@
       <RunAsTest>true</RunAsTest>
       <method v="2" />
     </configuration>
-    <configuration name="NoteTest.testEditComment" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+    <configuration name="ChatTest.deleteMessage" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
         <option name="externalProjectPath" value="$PROJECT_DIR$" />
@@ -132,7 +129,7 @@
           <list>
             <option value=":test" />
             <option value="--tests" />
-            <option value="&quot;NoteTest.testEditComment&quot;" />
+            <option value="&quot;ChatTest.deleteMessage&quot;" />
           </list>
         </option>
         <option name="vmOptions" />
@@ -143,7 +140,7 @@
       <RunAsTest>true</RunAsTest>
       <method v="2" />
     </configuration>
-    <configuration name="Tests in 'kt_2_2_1_Posts.test'" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+    <configuration name="ChatTest.getMessages" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
         <option name="externalProjectPath" value="$PROJECT_DIR$" />
@@ -155,6 +152,8 @@
         <option name="taskNames">
           <list>
             <option value=":test" />
+            <option value="--tests" />
+            <option value="&quot;ChatTest.getMessages&quot;" />
           </list>
         </option>
         <option name="vmOptions" />
@@ -189,11 +188,11 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Gradle.NoteTest" />
-        <item itemvalue="Gradle.Tests in 'kt_2_2_1_Posts.test'" />
-        <item itemvalue="Gradle.NoteTest.getComments" />
-        <item itemvalue="Gradle.NoteTest.testEditComment" />
         <item itemvalue="Gradle.kt_2_2_1_Posts [test]" />
+        <item itemvalue="Gradle.ChatTest.deleteChat_NoChat" />
+        <item itemvalue="Gradle.ChatTest.deleteChat" />
+        <item itemvalue="Gradle.ChatTest.deleteMessage" />
+        <item itemvalue="Gradle.ChatTest.getMessages" />
       </list>
     </recent_temporary>
   </component>

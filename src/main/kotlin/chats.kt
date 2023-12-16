@@ -21,7 +21,10 @@ data class Chat (
 //----------------------------------------------------------------------------------------------------------------------
 
 object ChatService {
-    private var chats : MutableMap<Int, Chat> = mutableMapOf()
+    private val chats : MutableMap<Int, Chat> = mutableMapOf()
+    //-----------------------------------------------------------
+
+    fun clear() = chats.clear()
     //-----------------------------------------------------------
 
     fun getUnreadChatsCount() = chats.values.count { chat : Chat -> chat.messages.any {!it.isRead} }
@@ -39,9 +42,9 @@ object ChatService {
     }
     //-----------------------------------------------------------
 
-    fun addMessage(fromUserId : Int, toUserId : Int, message : String) : Message {
-        chats.getOrPut(toUserId, { Chat(toUserId) }).messages += Message(fromUserId, false, message)
-        return chats[toUserId]!!.messages.last()
+    fun addMessage(userChart : Int, userId : Int, message : String) : Message {
+        chats.getOrPut(userChart, { Chat(userChart) }).messages += Message(userId, false, message)
+        return chats[userChart]!!.messages.last()
     }
     //-----------------------------------------------------------
 
