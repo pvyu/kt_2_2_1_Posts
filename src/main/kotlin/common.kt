@@ -4,7 +4,7 @@ enum class Privacy(val code : Int) { Unknown(-1), All(0),
                                      OnlyFriends(1), FriendsAndTheirFriends(2), OnlyUsers(3) }
 //---------------------------------------------------------------------------------------------------------------
 
-enum class EntityType { Unknown, Post, PostComment, Note, NoteComment }
+enum class EntityType { Unknown, Post, PostComment, Note, NoteComment, Chat, ChatMessage }
 //---------------------------------------------------------------------------------------------------------------
 
 
