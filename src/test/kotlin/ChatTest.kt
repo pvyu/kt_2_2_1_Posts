@@ -37,7 +37,7 @@ class ChatTest {
     //--------------------------------------------------------------------
 
     @Test
-    fun getMessages() {
+    fun testGetMessages() {
         val msg_1 : String = "from_1_to_2_#1"
         ChatService.addMessage(2, 1, msg_1)
         val msg_2 : String = "from_2_to_1_#2"
@@ -58,7 +58,7 @@ class ChatTest {
     //--------------------------------------------------------------------
 
     @Test(expected = NoSuchChatException::class)
-    fun getMessages_NoSuchChatException() {
+    fun testGetMessages_NoSuchChatException() {
         val msg_1 : String = "from_1_to_2_#1"
         ChatService.addMessage(2, 1, msg_1)
         val msg_2 : String = "from_2_to_1_#2"
@@ -74,7 +74,7 @@ class ChatTest {
 
 
     @Test
-    fun deleteMessage() {
+    fun testDeleteMessage() {
         val msg_1 : String = "from_1_to_2_#1"
         ChatService.addMessage(2, 1, msg_1)
         val msg_2 : String = "from_2_to_1_#2"
@@ -97,7 +97,7 @@ class ChatTest {
     //--------------------------------------------------------------------
 
     @Test(expected = NoSuchChatException::class)
-    fun deleteMessage_NoSuchChatException() {
+    fun testDeleteMessage_NoSuchChatException() {
         val msg_1 : String = "from_1_to_2_#1"
         ChatService.addMessage(2, 1, msg_1)
         val msg_2 : String = "from_2_to_1_#2"
@@ -113,7 +113,7 @@ class ChatTest {
     //--------------------------------------------------------------------
 
     @Test
-    fun deleteChat() {
+    fun testDeleteChat() {
         val msg_1 : String = "from_1_to_2_#1"
         ChatService.addMessage(2, 1, msg_1)
         val msg_2 : String = "from_2_to_1_#2"
@@ -134,7 +134,7 @@ class ChatTest {
     //--------------------------------------------------------------------
 
     @Test
-    fun deleteChat_NoChat() {
+    fun testDeleteChat_NoChat() {
         val msg_1 : String = "from_1_to_2_#1"
         ChatService.addMessage(2, 1, msg_1)
         val msg_2 : String = "from_2_to_1_#2"
@@ -150,6 +150,55 @@ class ChatTest {
         assertEquals(false, result)
     }
     //--------------------------------------------------------------------
+
+    @Test
+    fun testGetUnreadChatsCount() {
+        val msg_1 : String = "from_1_to_2_#1"
+        ChatService.addMessage(2, 1, msg_1)
+        val msg_2 : String = "from_2_to_1_#2"
+        ChatService.addMessage(2, 2, msg_2)
+        val msg_3 : String = "from_1_to_3_#1"
+        ChatService.addMessage(3, 1, msg_3)
+        val msg_4 : String = "from_1_to_4_#1"
+        ChatService.addMessage(4, 1, msg_4)
+
+        var msgs : List<Message> = ChatService.getMessages(2, 1)
+        msgs = ChatService.getMessages(4, 1)
+
+
+        val unreadChatsCount : Int = ChatService.getUnreadChatsCount()
+
+        assertEquals(2, unreadChatsCount)
+    }
+    //--------------------------------------------------------------------
+
+    @Test(expected = NoSuchChatException::class)
+    fun testGetUnreadChatsCount_NoSuchChatException() {
+        ChatService.getMessages(4, 1)
+    }
+    //--------------------------------------------------------------------
+
+    @Test
+    fun testGetLastMessages() {
+        val msg_1 : String = "from_1_to_2_#1"
+        ChatService.addMessage(2, 1, msg_1)
+        val msg_2 : String = "from_2_to_1_#2"
+        ChatService.addMessage(2, 2, msg_2)
+        val msg_3 : String = "from_1_to_3_#1"
+        ChatService.addMessage(3, 1, msg_3)
+        val msg_4 : String = "from_1_to_4_#1"
+        ChatService.addMessage(4, 1, msg_4)
+
+        val lastMsgs : Map<Int, String> = ChatService.getLastMessages()
+
+        assertEquals(3, lastMsgs.count())
+        assertEquals(msg_2, lastMsgs[2])
+        assertEquals(msg_3, lastMsgs[3])
+        assertEquals(msg_4, lastMsgs[4])
+    }
+    //--------------------------------------------------------------------
+
+
 
 
 }

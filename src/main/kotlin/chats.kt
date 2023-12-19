@@ -33,12 +33,16 @@ object ChatService {
     fun getChats() : Map<Int, Chat> = chats
     //-----------------------------------------------------------
 
-    fun getLastMessages() : List<Pair<Int, String>> = chats.values.map { Pair(it.userId, it.messages.lastOrNull()?.text ?: "No messages") }
+    fun getLastMessages() : Map<Int, String> =
+            chats.values.associate { Pair<Int, String>(it.userId, it.messages.lastOrNull()?.text ?: "No messages") }
     //-----------------------------------------------------------
 
     fun getMessages(userId : Int, count : Int) : List<Message> {
         val chat : Chat = chats[userId] ?: throw NoSuchChatException("ChatService.getMessages: No chat whit user with id = $userId")
-        return chat.messages.filter { msg : Message -> !msg.isRead }.take(count).onEach { it.isRead = true }
+        return chat.messages.asSequence().filter { msg : Message -> !msg.isRead }.
+                                          take(count).
+                                          onEach { it.isRead = true }.
+                                          toList()
     }
     //-----------------------------------------------------------
 
